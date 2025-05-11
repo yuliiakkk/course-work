@@ -35,7 +35,7 @@ lama_model.to(DEVICE)
 
 image_filenames = sorted([f for f in os.listdir(IMAGE_DIR) if f.endswith(".jpg")])
 for filename in image_filenames:
-    print(f"\n📷 Обробка: {filename}")
+    print(f"\nОбробка: {filename}")
     image_path = os.path.join(IMAGE_DIR, filename)
     mask_path = os.path.join(MASK_DIR, filename.replace(".jpg", ".png"))
     result_path = os.path.join(RESULTS_DIR, filename)
