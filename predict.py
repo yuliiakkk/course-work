@@ -10,7 +10,6 @@ from lama.saicinpainting.evaluation.data import pad_img_to_modulo
 from transformers import CLIPSegProcessor, CLIPSegForImageSegmentation
 from omegaconf import OmegaConf
 
-# 📁 Шляхи
 IMAGE_DIR = "dataset/images"
 RESULTS_DIR = "results"
 MODEL_PATH = "model/final_model.pth"
@@ -20,7 +19,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Завантаження UNet
 if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError("❌ Не знайдено model/final_model.pth — спочатку натренуйте модель через train.py")
+    raise FileNotFoundError("Не знайдено model/final_model.pth — спочатку натренуйте модель через train.py")
 
 unet = UNet(in_channels=4, out_channels=1).to(DEVICE)
 unet.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
@@ -37,11 +36,11 @@ lama_model = load_checkpoint(path=os.path.join(LAMA_MODEL_DIR, "models", "best.c
 lama_model.freeze()
 lama_model.to(DEVICE)
 
-# 🔤 Ввід об'єкта
+#Ввід об'єкта
 prompt = input("Введи назву об'єкта для видалення: ").strip()
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-# 📂 Обхід усіх зображень
+#Обхід усіх зображень
 for filename in sorted(os.listdir(IMAGE_DIR)):
     if not filename.endswith(".jpg"):
         continue
@@ -83,8 +82,8 @@ for filename in sorted(os.listdir(IMAGE_DIR)):
     with torch.no_grad():
         result = lama_model(batch)[0].permute(1, 2, 0).cpu().numpy().astype("uint8")
 
-    # 💾 Збереження
+    #Збереження
     result_bgr = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
     result_path = os.path.join(RESULTS_DIR, filename)
     cv2.imwrite(result_path, result_bgr)
-    print(f"✅ Збережено результат: {result_path}")
+    print(f"Збережено результат: {result_path}")
